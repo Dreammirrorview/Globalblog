@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adegan Global Web Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f8}
+header{background:#0a1e3f;color:#fff;padding:20px;text-align:center}
+nav{display:flex;flex-wrap:wrap;justify-content:center;background:#122b55}
+nav button{background:none;border:none;color:#fff;padding:10px 15px;cursor:pointer}
+main{padding:20px;max-width:1200px;margin:auto}
+.news{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px}
+.article{background:#fff;padding:15px;border-radius:6px}
+footer{text-align:center;padding:15px;background:#0a1e3f;color:#fff}
+</style>
+</head>
+<body>
+<header>
+<h1>Adegan Global Web Blog</h1>
+<p>World News • Climate <a href="https://example.com">..</a>Galaxy</p>
+</header>
+<nav>
+<button onclick="load('cnn')">Global</button>
+<button onclick="load('china')">China</button>
+<button onclick="load('usa')">USA</button>
+<button onclick="load('africa')">Africa</button>
+<button onclick="load('space')">Galaxy</button>
+</nav>
+<main>
+<h2 id="title">Latest News</h2>
+<div id="news" class="news"></div>
+</main>
+<footer>
+Owner: <strong>Olawale Abdul-Ganiyu</strong>
+</footer>
+<script>
+const feeds={
+cnn:"https://rss.cnn.com/rss/edition.rss",
+china:"https://www.scmp.com/rss/91/feed",
+usa:"https://rss.nytimes.com/services/xml/rss/nyt/US.xml",
+africa:"https://allafrica.com/tools/headlines/rdf/africa/headlines.rdf",
+space:"https://www.nasa.gov/rss/dyn/breaking_news.rss"
+};
+async function load(k){
+document.getElementById("title").innerText=k.toUpperCase()+" News";
+const api="https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent(feeds[k]);
+const r=await fetch(api);const d=await r.json();
+const n=document.getElementById("news");n.innerHTML="";
+d.items.slice(0,10).forEach(i=>{
+n.innerHTML+=`<div class='article'><a href='${i.link}' target='_blank'>${i.title}</a></div>`;
+});
+}
+load("cnn");
+</script>
+</body>
+</html>
